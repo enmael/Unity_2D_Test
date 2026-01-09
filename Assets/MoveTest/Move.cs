@@ -32,18 +32,58 @@ public class Move : MonoBehaviour
     }
 }
 */
+// using System.Collections;
+// using System.Collections.Generic;
+// using UnityEngine;
+
+// public class Move : MonoBehaviour
+// {
+//     private Rigidbody2D rb;
+//     private float moveInput;
+
+//     public float speed =5f;
+
+//     [SerializeField] GameObject playerObject;
+//     void Start()
+//     {
+//         rb = GetComponent<Rigidbody2D>();
+//     }
+
+//     void Update()
+//     {
+//         moveInput = Input.GetAxisRaw("Horizontal");
+       
+//         if(moveInput > 0 )
+//         {
+//             playerObject.transform.localScale = new Vector2(-5.0f, playerObject.transform.localScale.y);
+//         }
+//         else if(moveInput < 0)
+//         {
+//             playerObject.transform.localScale = new Vector2(5.0f, playerObject.transform.localScale.y);
+//         }
+
+//     }
+
+//     void FixedUpdate()
+//     {
+//         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+//     }
+// }
+/*
+    생성일자 : 2025.12.11
+    파일이름 : Move.cs
+    생성자:
+    내용: 좌우 움직임 구현 
+*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Move : MonoBehaviour
 {
+   public GameManager1 gameManager;
     private Rigidbody2D rb;
     private float moveInput;
-
-    public float speed =5f;
-
-    [SerializeField] GameObject playerObject;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -51,21 +91,22 @@ public class Move : MonoBehaviour
 
     void Update()
     {
+        //moveInput= Input.GetAxisRaw("Horizontal");
         moveInput = Input.GetAxisRaw("Horizontal");
-       
+
         if(moveInput > 0 )
         {
-            playerObject.transform.localScale = new Vector2(-5.0f, playerObject.transform.localScale.y);
+            gameManager.Player.transform.localScale = new Vector2(-5.0f, gameManager.Player.transform.localScale.y);
         }
         else if(moveInput < 0)
         {
-            playerObject.transform.localScale = new Vector2(5.0f, playerObject.transform.localScale.y);
+            gameManager.Player.transform.localScale = new Vector2(5.0f, gameManager.Player.transform.localScale.y);
         }
-
     }
 
     void FixedUpdate()
     {
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        rb.velocity = new Vector2(moveInput * gameManager.PlayerMoveSpeed, rb.velocity.y);
     }
+
 }
