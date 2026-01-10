@@ -1,4 +1,4 @@
-//4방향 움직이는 코드 
+#region 기본적인 움직이는 코드
 /*
 using System.Collections;
 using System.Collections.Generic;
@@ -32,49 +32,16 @@ public class Move : MonoBehaviour
     }
 }
 */
-// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
 
-// public class Move : MonoBehaviour
-// {
-//     private Rigidbody2D rb;
-//     private float moveInput;
+#endregion
 
-//     public float speed =5f;
-
-//     [SerializeField] GameObject playerObject;
-//     void Start()
-//     {
-//         rb = GetComponent<Rigidbody2D>();
-//     }
-
-//     void Update()
-//     {
-//         moveInput = Input.GetAxisRaw("Horizontal");
-       
-//         if(moveInput > 0 )
-//         {
-//             playerObject.transform.localScale = new Vector2(-5.0f, playerObject.transform.localScale.y);
-//         }
-//         else if(moveInput < 0)
-//         {
-//             playerObject.transform.localScale = new Vector2(5.0f, playerObject.transform.localScale.y);
-//         }
-
-//     }
-
-//     void FixedUpdate()
-//     {
-//         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-//     }
-// }
 /*
-    생성일자 : 2025.12.11
+    생성일자 : 2026.01.10
     파일이름 : Move.cs
     생성자:
-    내용: 좌우 움직임 구현 
+    내용: 좌우 움직임 구현, 캐릭터의 방향에 따른 오브젝트 좌우 반전 구현 
 */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -91,17 +58,8 @@ public class Move : MonoBehaviour
 
     void Update()
     {
-        //moveInput= Input.GetAxisRaw("Horizontal");
         moveInput = Input.GetAxisRaw("Horizontal");
-
-        if(moveInput > 0 )
-        {
-            gameManager.Player.transform.localScale = new Vector2(-5.0f, gameManager.Player.transform.localScale.y);
-        }
-        else if(moveInput < 0)
-        {
-            gameManager.Player.transform.localScale = new Vector2(5.0f, gameManager.Player.transform.localScale.y);
-        }
+        Reversal(moveInput);
     }
 
     void FixedUpdate()
@@ -109,4 +67,17 @@ public class Move : MonoBehaviour
         rb.velocity = new Vector2(moveInput * gameManager.PlayerMoveSpeed, rb.velocity.y);
     }
 
+    private void Reversal(float number)
+    {
+
+         if(number > 0 )
+        {
+            gameManager.Player.transform.localScale = new Vector2(-5.0f, gameManager.Player.transform.localScale.y);
+        }
+        else if(number < 0)
+        {
+            gameManager.Player.transform.localScale = new Vector2(5.0f, gameManager.Player.transform.localScale.y);
+        }
+        
+    }
 }

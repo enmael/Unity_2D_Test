@@ -37,48 +37,85 @@ using UnityEngine;
 
 public class bullet : MonoBehaviour
 {
-    public GameManager1 gameManager;
-    private Rigidbody2D rb;
+    // public GameManager1 gameManager;
+    // private Rigidbody2D rb;
 
-    int number = 0;
+    // int number = 0;
+
+    // void Awake()
+    // {
+    //     rb = GetComponent<Rigidbody2D>();
+    // }
+    // // 오브젝트가 활성화될 때 한 번 호출됩니다.
+    // void OnEnable()
+    // {
+    //     if(gameManager.PlayerDirection.x == 1 && gameManager.PlayerDirection.y == 0){number = 0;}
+    //     else if(gameManager.PlayerDirection.x == -1 && gameManager.PlayerDirection.y == 0){number = 1;}
+    //     else if(gameManager.PlayerDirection.x == 0 && gameManager.PlayerDirection.y == 1){number = 2;}
+    //     else if(gameManager.PlayerDirection.x == 0 && gameManager.PlayerDirection.y == -1  && gameManager.JumpConfirmation == true){number = 3;}
+
+    //     if (rb != null)
+    //     {
+    //         StartDash(number);
+    //     }
+    // }
+
+
+    // void StartDash(int number)
+    // {
+    //     if(number == 0)
+    //     {
+    //         rb.velocity = new Vector2(1f, 0f)* gameManager.BulletSpped;
+    //     }
+    //     else if(number == 1)
+    //     {
+    //         rb.velocity = new Vector2(-1f, 0f)* gameManager.BulletSpped;
+    //     }
+    //     else if(number == 2)
+    //     {
+    //         rb.velocity = new Vector2(0f, 1f)* gameManager.BulletSpped;
+    //     }
+    //     else if(number == 3)
+    //     {
+    //         rb.velocity = new Vector2(0f, -1f)* gameManager.BulletSpped;
+    //     }
+    //     //rb.velocity = new Vector2(0f, 1f)* gameManager.BulletSpped;
+    // }
+
+    public GameManager1 gameManager;
+    public float speed = 10f;       // 총알 속도
+    private Rigidbody2D rb;
 
     void Awake()
     {
+        // 처음 한 번만 컴포넌트를 가져옵니다.
         rb = GetComponent<Rigidbody2D>();
     }
-    // 오브젝트가 활성화될 때 한 번 호출됩니다.
+
+    // 오브젝트가 활성화(Active)될 때마다 호출됩니다.
     void OnEnable()
     {
-        if(gameManager.PlayerDirection.x == 1 && gameManager.PlayerDirection.y == 0){number = 0;}
-        else if(gameManager.PlayerDirection.x == -1 && gameManager.PlayerDirection.y == 0){number = 1;}
-        else if(gameManager.PlayerDirection.x == 0 && gameManager.PlayerDirection.y == 1){number = 2;}
-        else if(gameManager.PlayerDirection.x == 0 && gameManager.PlayerDirection.y == -1  && gameManager.JumpConfirmation == true){number = 3;}
+        // 1. 속도 설정
+        rb.velocity = transform.right * speed;
 
-        if (rb != null)
-        {
-            StartDash(number);
-        }
+        // 2. 3초 뒤에 "Deactivate"라는 이름의 함수를 실행하도록 예약
+        Invoke("Deactivate", 3f);
     }
 
-
-    void StartDash(int number)
+    // 비활성화 처리를 위한 별도의 함수
+    void Deactivate()
     {
-        if(number == 0)
-        {
-            rb.velocity = new Vector2(1f, 0f)* gameManager.BulletSpped;
-        }
-        else if(number == 1)
-        {
-            rb.velocity = new Vector2(-1f, 0f)* gameManager.BulletSpped;
-        }
-        else if(number == 2)
-        {
-            rb.velocity = new Vector2(0f, 1f)* gameManager.BulletSpped;
-        }
-        else if(number == 3)
-        {
-            rb.velocity = new Vector2(0f, -1f)* gameManager.BulletSpped;
-        }
-        //rb.velocity = new Vector2(0f, 1f)* gameManager.BulletSpped;
+        gameObject.SetActive(false);
+    }
+
+    // 오브젝트가 꺼질 때 예약을 취소 (안전장치)
+    // void OnDisable()
+    // {
+    //     CancelInvoke();
+    // }
+
+    void Update()
+    {
+        // 필요 시 로직 추가
     }
 }

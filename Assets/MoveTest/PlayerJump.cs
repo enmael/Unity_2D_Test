@@ -1,3 +1,9 @@
+/*
+    생성일자 : 2026.01.10
+    파일이름 : PlayerJump.cs
+    생성자:
+    내용: 점프 구현해둔 코드 
+*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

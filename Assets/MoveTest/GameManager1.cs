@@ -1,3 +1,10 @@
+/*
+    생성일자 : 2026.01.10
+    파일이름 : GameManager1.cs
+    생성자:
+    내용: 게임
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +21,7 @@ public class GameManager1 : MonoBehaviour
 
     [Header("총알코드")]
     [SerializeField] public GameObject[] bulletArray = new GameObject[5];
+    [SerializeField] public GameObject bullet;
     [SerializeField] public float bulletSpped = 10f;
 
     [SerializeField] float bullseTime = 0;
@@ -66,5 +74,11 @@ public class GameManager1 : MonoBehaviour
     {
         get{return bullseTime;}
         set{bullseTime = value;}
+    }
+
+    public GameObject Bullet
+    {
+        get{return bullet;}
+        set{bullet = value;}
     }
 }
