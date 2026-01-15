@@ -1,121 +1,74 @@
-// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-
-// public class bullet : MonoBehaviour
-// {
-//    public float bulletSpeed = 10f;
-//     private Rigidbody2D rb;
-
-//     void Awake()
-//     {
-//         rb = GetComponent<Rigidbody2D>();
-//     }
-
-//     // 오브젝트가 활성화(Active) 될 때마다 실행됨
-//     void OnEnable()
-//     {
-//         // 1. 앞으로(오른쪽으로) 발사
-//         rb.velocity = Vector2.right * bulletSpeed;
-
-//         // 2. 1초 뒤에 비활성화 함수 호출
-//         Invoke("Deactivate", 1.0f);
-//     }
-
-//     void Deactivate()
-//     {
-//         gameObject.SetActive(false);
-//     }
-
-//     // 만약 도중에 어디 부딪혀서 꺼질 때를 대비해 Invoke 취소
-//     void OnDisable()
-//     {
-//         CancelInvoke();
-//     }
-// }
+/*
+    생성일자 : 2026.01.16
+    파일이름 : bullet.cs
+    생성자: enmael
+    내용: 총알이 방향을 수신해서 발사되고 일정 시간후 비활성화 되는 코드 
+*/
 using UnityEngine;
+using System.Collections;
+using UnityEngine.Rendering;
 
 public class bullet : MonoBehaviour
 {
-    // public GameManager1 gameManager;
-    // private Rigidbody2D rb;
-
-    // int number = 0;
-
-    // void Awake()
-    // {
-    //     rb = GetComponent<Rigidbody2D>();
-    // }
-    // // 오브젝트가 활성화될 때 한 번 호출됩니다.
-    // void OnEnable()
-    // {
-    //     if(gameManager.PlayerDirection.x == 1 && gameManager.PlayerDirection.y == 0){number = 0;}
-    //     else if(gameManager.PlayerDirection.x == -1 && gameManager.PlayerDirection.y == 0){number = 1;}
-    //     else if(gameManager.PlayerDirection.x == 0 && gameManager.PlayerDirection.y == 1){number = 2;}
-    //     else if(gameManager.PlayerDirection.x == 0 && gameManager.PlayerDirection.y == -1  && gameManager.JumpConfirmation == true){number = 3;}
-
-    //     if (rb != null)
-    //     {
-    //         StartDash(number);
-    //     }
-    // }
-
-
-    // void StartDash(int number)
-    // {
-    //     if(number == 0)
-    //     {
-    //         rb.velocity = new Vector2(1f, 0f)* gameManager.BulletSpped;
-    //     }
-    //     else if(number == 1)
-    //     {
-    //         rb.velocity = new Vector2(-1f, 0f)* gameManager.BulletSpped;
-    //     }
-    //     else if(number == 2)
-    //     {
-    //         rb.velocity = new Vector2(0f, 1f)* gameManager.BulletSpped;
-    //     }
-    //     else if(number == 3)
-    //     {
-    //         rb.velocity = new Vector2(0f, -1f)* gameManager.BulletSpped;
-    //     }
-    //     //rb.velocity = new Vector2(0f, 1f)* gameManager.BulletSpped;
-    // }
+    //총알의 방향을 수신하는 코드
+    //총알이 수신한 방향을 가지고 발사되는 코드
 
     public GameManager1 gameManager;
-    public float speed = 10f;       // 총알 속도
     private Rigidbody2D rb;
 
+    private Coroutine disableCoroutine; // 코루틴을 제어하기 위한 변수
+
+    //1. 방향을 수신해서 총알을 원하는 방향으로 발사 
     void Awake()
     {
-        // 처음 한 번만 컴포넌트를 가져옵니다.
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // 오브젝트가 활성화(Active)될 때마다 호출됩니다.
     void OnEnable()
-    {
-        // 1. 속도 설정
-        rb.velocity = transform.right * speed;
+    {   
+        SetDirection();
 
-        // 2. 3초 뒤에 "Deactivate"라는 이름의 함수를 실행하도록 예약
-        Invoke("Deactivate", 3f);
+        // 이미 실행 중인 코루틴이 있다면 정지 (중복 방지)
+        if (disableCoroutine != null)
+        {
+            StopCoroutine(disableCoroutine);
+        }
+        
+        // 켜질 때마다 타이머 시작
+        disableCoroutine = StartCoroutine(Disablebullets(gameManager.BullseTime));
     }
 
-    // 비활성화 처리를 위한 별도의 함수
-    void Deactivate()
+    void SetDirection()
     {
-        gameObject.SetActive(false);
+       if(gameManager.BulletDirection == '\0' || gameManager.BulletDirection == 'R' )
+        {
+            rb.velocity = Vector2.right * gameManager.BulletSpped; 
+        }
+        else if(gameManager.BulletDirection == 'L' )
+        {
+            rb.velocity = Vector2.left * gameManager.BulletSpped;
+        }
+        else if(gameManager.BulletDirection == 'U' )
+        {
+            rb.velocity = Vector2.up * gameManager.BulletSpped; 
+        }
+        else if(gameManager.BulletDirection == 'D' )
+        {
+            rb.velocity = Vector2.down * gameManager.BulletSpped;
+        }
     }
 
-    // 오브젝트가 꺼질 때 예약을 취소 (안전장치)
-    // void OnDisable()
+    //2. 시간 지나면 자동으로 비활성화 (o)
+    IEnumerator Disablebullets(float time)
+    {
+        yield return new WaitForSeconds(time);
+        gameManager.BullButtonAction = false;
+        gameManager.Bullet.SetActive(false);
+    }
+
+    // 화면 밖으로 나가면 비활성화 (선택 사항)
+    // void OnBecameInvisible()
     // {
-    //     CancelInvoke();
+    //     gameObject.SetActive(false);
     // }
-
-    void Update()
-    {
-        // 필요 시 로직 추가
-    }
 }

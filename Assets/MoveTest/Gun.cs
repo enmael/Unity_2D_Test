@@ -1,80 +1,73 @@
+/*
+    생성일자 : 2026.01.16
+    파일이름 : Gun.cs
+    생성자: enmael
+    내용: 플레이어 캐릭터 위에 키보드 방향으로 총알이 발사되는 위치값을 총알에게 수신하는 코드이다.
+*/
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    //  public GameManager1 gameManager;
-
-    // public int number = 0;
-    // [SerializeField]private float nextFireTime = 0.0f;
-
-    // private Rigidbody2D rb;
-    // void Start()
-    // {
-    //     rb = GetComponent<Rigidbody2D>();
-    // }
-    // void Update()
-    // {
-
-    //     float inputX = Input.GetAxisRaw("Horizontal");
-    //     float inputY = Input.GetAxisRaw("Vertical");
-        
-    //     if (inputX != 0 || inputY != 0)
-    //     {
-    //         gameManager.PlayerDirection =  new Vector2(inputX, inputY).normalized;
-    //     }
-
-    //     if (Input.GetKeyDown(KeyCode.X))
-    //     {
-    //         if (Time.time >= nextFireTime)
-    //         {
-    //         // 3. 발사 가능! 다음 발사 시간을 현재 시간 + 딜레이로 설정
-    //         nextFireTime = Time.time + gameManager.BullseTime;
-
-    //         gameManager.BulletArray[number].transform.position = gameManager.Player.transform.position;
-    //         gameManager.BulletArray[number].SetActive(true);
-    //         number++;
-    //         }
-
-    //         if(gameManager.PlayerDirection.x == 0 && gameManager.PlayerDirection.y == -1  && gameManager.JumpConfirmation == true)
-    //         {
-    //             rb.velocity = new Vector2(rb.velocity.x, gameManager.PlayerJumpForce);
-    //         }
-
-            
-    //     }
-
-    //     if(number == 5)
-    //     {
-    //         number = 0;
-    //     }
-
-        
-    // }
-
     public GameManager1 gameManager;
 
+    //1.총알의 방향을 수신하고 그걸 총알에게 넘겨서 x키 누를때마다 발사시키는 기능 
     void Update()
     {
-        // 1. 방향키 입력 받기
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-        Vector2 fireDir = new Vector2(h, v);
 
-        // 2. x키 누르면 공격이다 
-        if (Input.GetKeyDown(KeyCode.X))
+        Direction(v,h);
+
+
+        // X키 점프
+        if (Input.GetKeyDown(KeyCode.X) && gameManager.Bullet.activeSelf == false)
         {
-            // 입력이 없으면(0,0) 기본적으로 오른쪽으로 발사
-            if (fireDir == Vector2.zero) fireDir = Vector2.right;
-
-            Shoot(fireDir);
+            gameManager.Bullet.transform.position = transform.position;
+            gameManager.Bullet.SetActive(true);
+            gameManager.BullButtonAction = true;
         }
+        
     }
 
-    void Shoot(Vector2 dir)
+    private void Direction(float v, float h)
     {
-       gameManager.Bullet.SetActive(true);
-       
+        if (h != 0 || v != 0)
+        {
+            //절대값을 비교하여 좌우 입력이 더 큰지, 상하 입력이 더 큰지 판단
+            if (Mathf.Abs(h) >= Mathf.Abs(v))
+            {
+                // 좌우 방향 체크
+                if (h > 0)
+                {
+                    Debug.Log("현재 방향: 오른쪽 (Right)");
+                    gameManager.BulletDirection = 'R';
+                }
+                else
+                {
+                    Debug.Log("현재 방향: 왼쪽 (Left)");
+                    gameManager.BulletDirection = 'L';
+                }
+            }
+            else
+            {
+                // 상하 방향 체크
+                if (v > 0)
+                {
+                    Debug.Log("현재 방향: 위쪽 (Up)");
+                    gameManager.BulletDirection = 'U';
+                }
+                else
+                {
+                    Debug.Log("현재 방향: 아래쪽 (Down)");
+                    gameManager.BulletDirection = 'D';
+                }
+            }
+        }
+        
     }
+
 }

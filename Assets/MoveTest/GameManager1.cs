@@ -20,11 +20,12 @@ public class GameManager1 : MonoBehaviour
     [SerializeField] Vector2 playerDirection;
 
     [Header("총알코드")]
-    [SerializeField] public GameObject[] bulletArray = new GameObject[5];
     [SerializeField] public GameObject bullet;
     [SerializeField] public float bulletSpped = 10f;
-
     [SerializeField] float bullseTime = 0;
+    [SerializeField] char bulletDirection;
+
+    [SerializeField] bool bullButtonAction = false;
 
     public GameObject Player
     {
@@ -51,13 +52,6 @@ public class GameManager1 : MonoBehaviour
         set { jumpConfirmation = value; }
     }
 
-    public GameObject[]BulletArray
-    {
-        get { return bulletArray; }
-        set { bulletArray = value; }
-        
-    }
-
     public float BulletSpped
     {
         get{return bulletSpped;}
@@ -81,4 +75,18 @@ public class GameManager1 : MonoBehaviour
         get{return bullet;}
         set{bullet = value;}
     }
+
+    public char BulletDirection
+    {
+        get{return bulletDirection;}
+        set{bulletDirection = value;}
+    }
+
+    public bool BullButtonAction
+    {
+        get{return bullButtonAction;}
+        set{bullButtonAction = value;}
+    }
+
+
 }

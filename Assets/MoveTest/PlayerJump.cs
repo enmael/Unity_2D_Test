@@ -23,7 +23,7 @@ public class PlayerJump : MonoBehaviour
     {
 
         // Z키 점프
-        if (Input.GetKeyDown(KeyCode.Z) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Z) && isGrounded == true)
         {
             rb.velocity = new Vector2(rb.velocity.x, gameManager.PlayerJumpForce);
         }
